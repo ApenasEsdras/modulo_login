@@ -5,12 +5,13 @@ class AppWidget extends StatelessWidget {
   const AppWidget({super.key});
 
   @override
-  Widget build(BuildContext context){
-       return MaterialApp.router(
-      title: 'My Smart App',
+  Widget build(BuildContext context) {
+    Modular.setInitialRoute('/');
+    return MaterialApp.router(
+      title: 'AppInnovaro',
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: Modular.routerConfig,
     );
   }
 }

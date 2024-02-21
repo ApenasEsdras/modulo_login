@@ -1,8 +1,8 @@
-// ignore_for_file: avoid_print, library_private_types_in_public_api
 
+// LoginPage
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:modulo_login/app/login/login_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,28 +12,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService authService = Modular.get();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<void> _signInWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print('Login successful');
-
-      Modular.to.navigate('/home');
-    } on FirebaseAuthException catch (e) {
-      print('Login failed: ${e.message}');
-    }
+  Future<void> _login() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    await authService.login(email, password);
+    // Redirecionar para Home após login
+    Modular.to.navigate('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -44,15 +38,11 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextField(
               controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
+              decoration: const InputDecoration(labelText: 'Senha'),
             ),
             ElevatedButton(
-              onPressed: () async {
-                final email = emailController.text.trim();
-                final password = passwordController.text.trim();
-                await _signInWithEmailAndPassword(email, password);
-              },
+              onPressed: _login,
               child: const Text('Login'),
             ),
           ],
