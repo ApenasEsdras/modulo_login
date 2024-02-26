@@ -6,7 +6,6 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Modular.setInitialRoute('/');
     return MaterialApp.router(
       title: 'AppInnovaro',
       routeInformationParser: Modular.routeInformationParser,
