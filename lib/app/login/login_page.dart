@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modulo_login/app/login/login_service.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -41,10 +42,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _login() async {
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
-    await authService.login(email, password);
+Future<void> _login() async {
+  final email = emailController.text.trim();
+  final password = passwordController.text.trim();
+  final authService = Provider.of<AuthService>(context, listen: false);
+  await authService.login(email, password);
+
+  if (authService.isLoggedIn) {
     Modular.to.navigate('/home/');
   }
+}
+
 }
